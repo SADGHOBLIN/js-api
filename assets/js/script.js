@@ -20,17 +20,14 @@ async function getStatus(e) {
 }
 
 function displayStatus(data) {
-    let heading = "API Key Status";
+    let header = "API Key Status";
     let results = `<div>Your key is valid until:</div>`;
     results += `<div class="key-status">${data.expiry}</div>`;
 
-    document.getElementById("resultsModalTitle").innerText = heading;
-    document.getElementById("results-content").innerHTML = results;
-
-    resultsModal.show();
+    displayModal(header, results);
 }
 
-// POST request to send JS code to be tested, log results to console
+// POST request to send JS code to be tested
 async function postForm(e) {
     const form = new FormData(document.getElementById("checksform"));
     const response = await fetch(API_URL, {
@@ -63,10 +60,12 @@ function displayErrors(data) {
         }
     }
 
-    displayData(header, results);
+    displayModal(header, results);
+}
 
+// Display modal with results initiated from button clicks
+function displayModal(header, results) {
     document.getElementById("resultsModalTitle").innerText = header;
     document.getElementById("results-content").innerHTML = results;
-
     resultsModal.show();
 }
