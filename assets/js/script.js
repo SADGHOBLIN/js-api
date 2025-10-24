@@ -43,8 +43,30 @@ async function postForm(e) {
     const data = await response.json();
 
     if (response.ok) {
-        console.log(data);
+        displayErrors(data);
     } else {
         throw new Error(data.error);
     }
+}
+
+function displayErrors(data) {
+    let header = `JSHint Results for: ${data.file}`;
+    let results;
+    if (data.total_errors === 0) {
+        results = `<div class="no_errors">No errors reported!</div>`;
+    } else {
+        results = `<div>Total Errors: <span class="error-count">${data.total_errors}</span></div>`;
+        for (let error of data.error_list) {
+            results += `<div>At line <span class="line">${error.line}</span>, `;
+            results += `column <span class="column">${error.col}</span></div>`;
+            results += `<div class="error">${error.error}</div>`;
+        }
+    }
+
+    displayData(header, results);
+
+    document.getElementById("resultsModalTitle").innerText = header;
+    document.getElementById("results-content").innerHTML = results;
+
+    resultsModal.show();
 }
